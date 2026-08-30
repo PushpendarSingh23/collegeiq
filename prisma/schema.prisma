@@ -1,0 +1,85 @@
+// Prisma Schema for CollegeIQ - College Discovery & Decision Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model College {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  location        String        // e.g. "New Delhi, Delhi"
+  state           String
+  city            String
+  fees            Int           // Annual tuition fees in INR
+  rating          Float         // Score out of 5.0 (e.g. 4.8)
+  overview        String        @db.Text
+  averagePackage  Int           // In INR per annum (e.g. 2100000)
+  highestPackage  Int           // In INR per annum (e.g. 6500000)
+  establishedYear Int?
+  type            String        @default("Government") // Government | Private | Autonomous
+  websiteUrl      String?
+  imageUrl        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  courses         Course[]
+  reviews         Review[]
+  cutoffs         ExamCutoff[]
+
+  @@index([location])
+  @@index([fees])
+  @@index([rating])
+  @@index([averagePackage])
+  @@index([name])
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "B.Tech in Computer Science and Engineering"
+  degree      String   // "B.Tech", "M.Tech", "MBA", "MBBS", "B.Sc"
+  duration    String   // e.g. "4 Years", "2 Years"
+  fees        Int      // Total / Annual course fees
+  seats       Int?
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([collegeId])
+  @@index([degree])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  rating      Float    // 1.0 to 5.0
+  comment     String   @db.Text
+  authorName  String
+  authorRole  String?  // e.g. "B.Tech CSE, Batch of 2024", "Alumni"
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([collegeId])
+}
+
+model ExamCutoff {
+  id          String   @id @default(cuid())
+  exam        String   // "JEE Main", "NEET", "CAT", "GATE", "BITSAT"
+  branch      String?  // e.g. "Computer Science & Engineering", "General Medicine"
+  category    String   @default("General") // "General", "OBC", "SC", "ST", "EWS"
+  minRank     Int      // Opening Rank
+  maxRank     Int      // Closing Cutoff Rank
+  year        Int      @default(2024)
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([exam])
+  @@index([minRank, maxRank])
+  @@index([collegeId])
+}
