@@ -387,7 +387,7 @@ Calculates predicted college admissions and confidence scores from an entrance e
 
 1. **Clone the repository**:
    ```bash
-   git clone <REPO_URL>
+   git clone https://github.com/PushpendarSingh23/collegeiq.git
    cd collegeiq
    ```
 
