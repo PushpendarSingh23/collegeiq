@@ -3,7 +3,9 @@
 > **AI Software Engineer Internship Assessment**  
 > **Role**: Full Stack Engineer  
 > **Track**: Track A — College Discovery Platform  
-> **Status**: Production-Ready MVP  
+> **Live URL**: [https://collegeiq-alpha.vercel.app](https://collegeiq-alpha.vercel.app)  
+> **GitHub Repository**: [https://github.com/PushpendarSingh23/collegeiq](https://github.com/PushpendarSingh23/collegeiq)  
+> **Status**: Production-Ready Live Deployment  
 
 ---
 
